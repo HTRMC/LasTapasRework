@@ -1,0 +1,31 @@
+// File: prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Submission {
+  id        Int      @id @default(autoincrement())
+  content   String
+  createdAt DateTime @default(now())
+}
+
+model Order {
+  id        Int         @id @default(autoincrement())
+  createdAt DateTime    @default(now())
+  items     OrderItem[]
+}
+
+model OrderItem {
+  id       Int    @id @default(autoincrement())
+  orderId  Int
+  order    Order  @relation(fields: [orderId], references: [id])
+  dishId   Int
+  dishName String
+  quantity Int
+}
