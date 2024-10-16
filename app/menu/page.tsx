@@ -4,6 +4,7 @@
 
 import Image from 'next/image';
 import { useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import styles from './MenuPage.module.css';
 import OrderForm from '../components/OrderForm';
 import { Allergy, allergyIcons, allergyNames } from '@/lib/allergies';
@@ -34,6 +35,8 @@ const dishes: Dish[] = [
 export default function MenuPage() {
   const [order, setOrder] = useState<OrderItem[]>([]);
   const [isOrderMenuOpen, setIsOrderMenuOpen] = useState(false);
+  const searchParams = useSearchParams();
+  const tableNumber = searchParams.get('table');
 
   const addToOrder = (dish: Dish) => {
     setOrder(currentOrder => {
@@ -52,7 +55,7 @@ export default function MenuPage() {
   return (
     <main className={styles.container}>
       <h1 className={styles.title}>Our Tapas Menu</h1>
-      <p className={styles.description}>Choose your favorite tapas for your next round!</p>
+      <p className={styles.description}>Table {tableNumber}: Choose your favorite tapas for your next round!</p>
       
       <button 
         className={styles.menuToggle} 
@@ -65,7 +68,7 @@ export default function MenuPage() {
       </button>
 
       <div className={`${styles.orderMenu} ${isOrderMenuOpen ? styles.open : ''}`}>
-        <OrderForm order={order} setOrder={setOrder} />
+        <OrderForm order={order} setOrder={setOrder} tableNumber={Number(tableNumber)} />
       </div>
 
       <div className={styles.menuGrid}>

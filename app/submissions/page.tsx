@@ -19,6 +19,7 @@ interface OrderItem {
 
 interface Order {
   id: number;
+  tableNumber: number;
   createdAt: string;
   items: OrderItem[];
 }
@@ -84,7 +85,7 @@ export default function SubmissionsPage() {
           <ul className={styles.list}>
             {orders.map((order) => (
               <li key={order.id} className={styles.item}>
-                <h3>Order #{order.id}</h3>
+                <h3>Order #{order.id} - Table {order.tableNumber}</h3>
                 <p>Ordered at: {new Date(order.createdAt).toLocaleString()}</p>
                 <ul className={styles.orderItems}>
                   {order.items.map((item) => (

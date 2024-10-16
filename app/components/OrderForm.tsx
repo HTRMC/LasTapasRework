@@ -16,9 +16,10 @@ interface OrderItem {
 interface OrderFormProps {
   order: OrderItem[];
   setOrder: React.Dispatch<React.SetStateAction<OrderItem[]>>;
+  tableNumber: number;
 }
 
-export default function OrderForm({ order, setOrder }: OrderFormProps) {
+export default function OrderForm({ order, setOrder, tableNumber }: OrderFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState('');
 
@@ -41,7 +42,7 @@ export default function OrderForm({ order, setOrder }: OrderFormProps) {
       const response = await fetch('/api/submit-order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ order }),
+        body: JSON.stringify({ order, tableNumber }),
       });
       if (response.ok) {
         const { order: savedOrder } = await response.json();
@@ -58,10 +59,9 @@ export default function OrderForm({ order, setOrder }: OrderFormProps) {
     }
   };
 
-
   return (
     <div className={styles.orderForm}>
-      <h2 className={styles.orderTitle}>Your Tapas Round</h2>
+      <h2 className={styles.orderTitle}>Your Tapas Round - Table {tableNumber}</h2>
       {order.length === 0 ? (
         <p className={styles.emptyOrder}>Your round is empty. Add some tapas from the menu!</p>
       ) : (

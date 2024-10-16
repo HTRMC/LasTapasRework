@@ -15,11 +15,12 @@ interface OrderItem {
 }
 
 export async function POST(req: NextRequest) {
-  const { order } = await req.json() as { order: OrderItem[] };
+  const { order, tableNumber } = await req.json() as { order: OrderItem[], tableNumber: number };
 
   try {
     const savedOrder = await prisma.order.create({
       data: {
+        tableNumber,
         items: {
           create: order.map((item) => ({
             dishId: item.id,

@@ -18,6 +18,7 @@ model Submission {
 
 model Order {
   id        Int         @id @default(autoincrement())
+  tableNumber Int
   createdAt DateTime    @default(now())
   items     OrderItem[]
 }
