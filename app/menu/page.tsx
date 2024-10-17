@@ -21,19 +21,19 @@ interface OrderItem extends Dish {
 }
 
 const dishes: Dish[] = [
-  { id: 1, name: 'Paella Valenciana', image: '/images/paella.webp', allergies: ['shellfish', 'gluten'], category: 'Main Courses' },
-  { id: 2, name: 'Gazpacho', image: '/images/gazpacho.webp', allergies: [], category: 'Appetizers' },
-  { id: 3, name: 'Tortilla Española', image: '/images/tortilla.webp', allergies: ['eggs'], category: 'Appetizers' },
-  { id: 4, name: 'Patatas Bravas', image: '/images/patatas-bravas.webp', allergies: ['eggs'], category: 'Side Dishes' },
-  { id: 5, name: 'Gambas al Ajillo', image: '/images/gambas.webp', allergies: ['shellfish'], category: 'Appetizers' },
-  { id: 6, name: 'Croquetas de Jamón', image: '/images/croquetas.webp', allergies: ['gluten', 'dairy'], category: 'Appetizers' },
-  { id: 7, name: 'Pulpo a la Gallega', image: '/images/pulpo.webp', allergies: ['shellfish'], category: 'Main Courses' },
-  { id: 8, name: 'Calamares a la Romana', image: '/images/calamares.webp', allergies: ['gluten', 'shellfish'], category: 'Appetizers' },
-  { id: 9, name: 'Churros con Chocolate', image: '/images/churros.webp', allergies: ['gluten', 'dairy'], category: 'Desserts' },
-  { id: 10, name: 'Sangria', image: '/images/sangria.webp', allergies: [], category: 'Drinks', subcategory: 'Alcoholic' },
-  { id: 11, name: 'Tinto de Verano', image: '/images/tinto-de-verano.webp', allergies: [], category: 'Drinks', subcategory: 'Alcoholic' },
-  { id: 12, name: 'Horchata', image: '/images/horchata.webp', allergies: ['nuts'], category: 'Drinks', subcategory: 'Non-Alcoholic' },
-  { id: 13, name: 'Café con Leche', image: '/images/cafe-con-leche.webp', allergies: ['dairy'], category: 'Drinks', subcategory: 'Hot Beverages' },
+  { id: 1, name: 'Paella Valenciana', image: '/images/paella.avif', allergies: ['shellfish', 'gluten'], category: 'Main Courses' },
+  { id: 2, name: 'Gazpacho', image: '/images/gazpacho.avif', allergies: [], category: 'Appetizers' },
+  { id: 3, name: 'Tortilla Española', image: '/images/tortilla.avif', allergies: ['eggs'], category: 'Appetizers' },
+  { id: 4, name: 'Patatas Bravas', image: '/images/patatas-bravas.avif', allergies: ['eggs'], category: 'Side Dishes' },
+  { id: 5, name: 'Gambas al Ajillo', image: '/images/gambas.avif', allergies: ['shellfish'], category: 'Appetizers' },
+  { id: 6, name: 'Croquetas de Jamón', image: '/images/croquetas.avif', allergies: ['gluten', 'dairy'], category: 'Appetizers' },
+  { id: 7, name: 'Pulpo a la Gallega', image: '/images/pulpo.avif', allergies: ['shellfish'], category: 'Main Courses' },
+  { id: 8, name: 'Calamares a la Romana', image: '/images/calamares.avif', allergies: ['gluten', 'shellfish'], category: 'Appetizers' },
+  { id: 9, name: 'Churros con Chocolate', image: '/images/churros.avif', allergies: ['gluten', 'dairy'], category: 'Desserts' },
+  { id: 10, name: 'Sangria', image: '/images/sangria.avif', allergies: [], category: 'Drinks', subcategory: 'Alcoholic' },
+  { id: 11, name: 'Tinto de Verano', image: '/images/tinto-de-verano.avif', allergies: [], category: 'Drinks', subcategory: 'Alcoholic' },
+  { id: 12, name: 'Horchata', image: '/images/horchata.avif', allergies: ['nuts'], category: 'Drinks', subcategory: 'Non-Alcoholic' },
+  { id: 13, name: 'Café con Leche', image: '/images/cafe-con-leche.avif', allergies: ['dairy'], category: 'Drinks', subcategory: 'Hot Beverages' },
 ];
 
 const categories = ['All', 'Appetizers', 'Main Courses', 'Side Dishes', 'Desserts', 'Drinks'];
@@ -46,6 +46,7 @@ function MenuContent({ initialTableNumber }: { initialTableNumber: string | null
   const [activeCategory, setActiveCategory] = useState('All');
   const [activeDrinkSubcategory, setActiveDrinkSubcategory] = useState('All Drinks');
   const searchParams = useSearchParams();
+  const [visibleDishes, setVisibleDishes] = useState<number[]>([]);
 
   useEffect(() => {
     setTableNumber(searchParams.get('table'));
@@ -73,12 +74,17 @@ function MenuContent({ initialTableNumber }: { initialTableNumber: string | null
     return dish.category === activeCategory;
   });
 
+  useEffect(() => {
+    setVisibleDishes([]);
+    const timer = setTimeout(() => {
+      setVisibleDishes(filteredDishes.map(dish => dish.id));
+    }, 50);
+    return () => clearTimeout(timer);
+  }, [activeCategory, activeDrinkSubcategory]);
+
   return (
     <main className={styles.container}>
-      <h1 className={styles.title}>Our Tapas Menu</h1>
-      {tableNumber && (
-        <p className={styles.description}>Table {tableNumber}: Choose your favorite tapas for your next round!</p>
-      )}
+      <h1 className={styles.title}>Menu</h1>
       
       <button 
         className={styles.menuToggle} 
@@ -126,14 +132,16 @@ function MenuContent({ initialTableNumber }: { initialTableNumber: string | null
 
       <div className={styles.menuGrid}>
         {filteredDishes.map((dish) => (
-          <div key={dish.id} className={styles.dishCard}>
+          <div 
+            key={dish.id} 
+            className={`${styles.dishCard} ${visibleDishes.includes(dish.id) ? styles.visible : ''}`}
+          >
             <Image 
               src={dish.image} 
               alt={dish.name} 
               width={500} 
               height={500} 
               className={styles.dishImage}
-              style={{ objectFit: 'cover', width: '100%', height: 'auto' }}
             />
             <h3 className={styles.dishName}>{dish.name}</h3>
             <div className={styles.allergyIcons}>

@@ -26,7 +26,7 @@
 
 .menuGrid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(250px, 1fr));
   gap: 20px;
   margin-bottom: 40px;
 }
@@ -38,11 +38,14 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  opacity: 0;
+  transform: translateY(20px);
 }
 
-.dishCard:hover {
-  transform: translateY(-5px);
+.dishCard.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .dishImage {
@@ -99,6 +102,7 @@
   justify-content: center;
   margin-bottom: 20px;
   flex-wrap: wrap;
+  position: relative;
 }
 
 .categoryTab,
@@ -112,12 +116,32 @@
   font-family: 'Gardablack', cursive;
   font-size: 1.2rem;
   color: var(--red);
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.categoryTab::after,
+.subcategoryTab::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
 }
 
 .active {
   background-color: var(--yellow);
   color: var(--red);
+  transform: translateY(-3px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.active::after {
+  transform: scaleX(1);
 }
 
 .menuToggle {
