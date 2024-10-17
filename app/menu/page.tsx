@@ -1,9 +1,7 @@
-// File: app/menu/page.tsx
-
 'use client';
 
 import Image from 'next/image';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import styles from './MenuPage.module.css';
 import OrderForm from '../components/OrderForm';
@@ -32,11 +30,15 @@ const dishes: Dish[] = [
   { id: 9, name: 'Churros con Chocolate', image: '/images/churros.webp', allergies: ['gluten', 'dairy'] },
 ];
 
-export default function MenuPage() {
+function MenuContent({ initialTableNumber }: { initialTableNumber: string | null }) {
   const [order, setOrder] = useState<OrderItem[]>([]);
   const [isOrderMenuOpen, setIsOrderMenuOpen] = useState(false);
+  const [tableNumber, setTableNumber] = useState<string | null>(initialTableNumber);
   const searchParams = useSearchParams();
-  const tableNumber = searchParams.get('table');
+
+  useEffect(() => {
+    setTableNumber(searchParams.get('table'));
+  }, [searchParams]);
 
   const addToOrder = (dish: Dish) => {
     setOrder(currentOrder => {
@@ -55,7 +57,9 @@ export default function MenuPage() {
   return (
     <main className={styles.container}>
       <h1 className={styles.title}>Our Tapas Menu</h1>
-      <p className={styles.description}>Table {tableNumber}: Choose your favorite tapas for your next round!</p>
+      {tableNumber && (
+        <p className={styles.description}>Table {tableNumber}: Choose your favorite tapas for your next round!</p>
+      )}
       
       <button 
         className={styles.menuToggle} 
@@ -68,7 +72,9 @@ export default function MenuPage() {
       </button>
 
       <div className={`${styles.orderMenu} ${isOrderMenuOpen ? styles.open : ''}`}>
-        <OrderForm order={order} setOrder={setOrder} tableNumber={Number(tableNumber)} />
+        {tableNumber && (
+          <OrderForm order={order} setOrder={setOrder} tableNumber={Number(tableNumber)} />
+        )}
       </div>
 
       <div className={styles.menuGrid}>
@@ -102,4 +108,18 @@ export default function MenuPage() {
       </div>
     </main>
   );
+}
+
+export default function MenuPage() {
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) {
+    return null; // or a loading spinner
+  }
+
+  return <MenuContent initialTableNumber={null} />;
 }
