@@ -4,8 +4,15 @@
 
 @font-face {
   font-family: 'Gardablack';
-  src: url('/_fonts/Gardablack.woff2') format('woff2'),
-       url('/_fonts/Gardablack.woff') format('woff');
+  src: url('/_fonts/Gardablack.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Cubano';
+  src: url('/_fonts/Cubano.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
