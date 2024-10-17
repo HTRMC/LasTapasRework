@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import styles from './OrderForm.module.css';
 import React from 'react';
-import { Allergy } from '@/lib/allergies';
+import { Allergy } from '@/app/_lib/allergies';
 
 interface OrderItem {
   id: number;
@@ -11,6 +11,8 @@ interface OrderItem {
   image: string;
   allergies: Allergy[];
   quantity: number;
+  category: string;
+  subcategory?: string;
 }
 
 interface OrderFormProps {

@@ -2,14 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+@font-face {
+  font-family: 'Gardablack';
+  src: url('/_fonts/Gardablack.woff2') format('woff2'),
+       url('/_fonts/Gardablack.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+:root {
+  --red: #B71C1C;
+  --light-blue: #B3E5FC;
+  --beige: #F5E6D3;
+  --yellow: #FDD835;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: var(--beige);
+  color: var(--red);
 }

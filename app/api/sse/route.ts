@@ -1,7 +1,7 @@
 // File: app/api/sse/route.ts
 
 import { NextRequest, NextResponse } from 'next/server';
-import eventEmitter from '@/lib/eventEmitter';
+import eventEmitter from '@/app/_lib/eventEmitter';
 
 const clients = new Set<ReadableStreamDefaultController>();
 
