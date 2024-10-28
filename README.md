@@ -1,36 +1,141 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Las Tapas Digital Menu System
+**PRIVATE & CONFIDENTIAL**  
+*Property of Las Tapas Company*
 
-## Getting Started
+## Overview
+The Las Tapas Digital Menu System is a modern, interactive web application designed to streamline the ordering process in Las Tapas restaurants. The system enables customers to browse menu items, place orders, and tracks order fulfillment in real-time.
 
-First, run the development server:
+## System Architecture
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+![Las Tapas System Architecture](./las_tapas_system_architecture.png)
+
+## Core Components
+
+### 1. Customer Interface
+- **Table Number Entry** (`app/page.tsx`)
+  - Initial entry point for customers
+  - Validates table numbers
+  - Redirects to menu interface
+
+- **Menu Interface** (`app/menu/page.tsx`)
+  - Displays all available dishes
+  - Interactive category filtering
+  - Real-time order management
+  - Allergy information display
+
+- **Order Management** (`app/components/OrderForm.tsx`)
+  - Shopping cart functionality
+  - Order modification
+  - Real-time order submission
+
+### 2. Server Components
+- **API Routes**
+  - `/api/submit-order`: Handles order submission
+  - `/api/submissions`: Retrieves order history
+  - `/api/sse`: Manages real-time updates
+
+- **Event System**
+  - Real-time order notifications
+  - Kitchen alert system
+  - Order status updates
+
+### 3. Database Schema
+```prisma
+model Order {
+  id          Int         @id @default(autoincrement())
+  tableNumber Int
+  createdAt   DateTime    @default(now())
+  items       OrderItem[]
+}
+
+model OrderItem {
+  id       Int    @id @default(autoincrement())
+  orderId  Int
+  order    Order  @relation(fields: [orderId], references: [id])
+  dishId   Int
+  dishName String
+  quantity Int
+}
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Features
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Menu Management
+- Dynamic category filtering
+- Subcategory support for beverages
+- Allergy information display
+- High-quality dish images
+- Responsive design
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Order Processing
+- Real-time order tracking
+- Table-based ordering
+- Multiple item support
+- Order modification capabilities
+- Instant kitchen notifications
 
-## Learn More
+### Monitoring System
+- Order history tracking
+- Real-time order updates
+- Kitchen display integration
+- Table status monitoring
 
-To learn more about Next.js, take a look at the following resources:
+## Technical Stack
+- **Frontend**: Next.js 14, React 18
+- **Backend**: Next.js API Routes
+- **Database**: PostgreSQL with Prisma ORM
+- **Real-time Updates**: Server-Sent Events (SSE)
+- **Styling**: CSS Modules, Tailwind CSS
+- **Image Optimization**: Sharp
+- **Type Safety**: TypeScript
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Security Features
+- Environment variable protection
+- Database connection pooling
+- SQL injection prevention
+- XSS protection
+- CSRF protection
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Development Setup
 
-## Deploy on Vercel
+1. Clone the repository (requires access)
+2. Install dependencies:
+```bash
+npm install
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+3. Set up environment variables:
+```bash
+cp .env.example .env
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+4. Initialize database:
+```bash
+npx prisma generate
+npx prisma db push
+```
+
+5. Start development server:
+```bash
+npm run dev
+```
+
+## Deployment
+
+The application is configured for deployment on Vercel with the following considerations:
+- PostgreSQL database hosted on Neon
+- Automatic preview deployments
+- Production environment protection
+- Database connection pooling
+
+## Performance Optimizations
+- Image optimization with Sharp
+- Dynamic imports
+- Route prefetching
+- CSS optimization
+- Database connection pooling
+
+## License
+This software is proprietary and confidential. Unauthorized copying, transferring, or reproduction of the contents of this system, via any medium is strictly prohibited.
+
+Copyright © 2024 Las Tapas Company. All rights reserved.
